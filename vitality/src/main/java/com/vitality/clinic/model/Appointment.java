@@ -3,6 +3,8 @@ package com.vitality.clinic.model;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -20,10 +22,12 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Doctor doctor;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Patient patient;
 
     @Column(name = "date")
@@ -34,4 +38,12 @@ public class Appointment {
 
     @Column(name = "end_time")
     private LocalTime endTime;
+
+    public Appointment(Doctor doctor, Patient patient, LocalDate date, LocalTime startTime, LocalTime endTime) {
+        this.doctor = doctor;
+        this.patient = patient;
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 }

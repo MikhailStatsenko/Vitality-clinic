@@ -1,6 +1,7 @@
 package com.vitality.clinic.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vitality.clinic.utils.enums.MedicalSpecialty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,14 +29,18 @@ public class Doctor {
     private String middleName;
 
     @Column(name = "speciality")
-    private String speciality;
+    @Enumerated(EnumType.STRING)
+    private MedicalSpecialty speciality;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "doctor",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true)
     private List<Appointment> appointments;
 
     public void addAppointment(Appointment appointment) {
@@ -46,6 +51,5 @@ public class Doctor {
     public void removeAppointment(Appointment appointment) {
         appointments.remove(appointment);
         appointment.setDoctor(null);
-        appointment.setPatient(null);
     }
 }

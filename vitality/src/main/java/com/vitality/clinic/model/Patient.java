@@ -32,12 +32,15 @@ public class Patient {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true)
     private List<Appointment> appointments;
 
     public void addAppointment(Appointment appointment) {
@@ -47,7 +50,6 @@ public class Patient {
 
     public void removeAppointment(Appointment appointment) {
         appointments.remove(appointment);
-        appointment.setDoctor(null);
         appointment.setPatient(null);
     }
 }
