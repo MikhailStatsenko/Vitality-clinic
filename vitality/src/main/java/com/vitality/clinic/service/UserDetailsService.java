@@ -25,6 +25,6 @@ public class UserDetailsService implements org.springframework.security.core.use
         if (user.isEmpty())
             throw new UsernameNotFoundException("User not found");
 
-        return new com.vitality.clinic.security.UserDetails(user.get());
+        return user.get();
     }
 }

@@ -1,22 +1,26 @@
 package com.vitality.clinic.model;
 
-import com.vitality.clinic.model.enums.UserRole;
+import com.vitality.clinic.utils.enums.UserRole;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +28,6 @@ public class User {
 
     @NotEmpty
     @Email(message = "Логин должен соответствовать формату электронной почты")
-    @Size(min = 5, max = 100, message = "Логин содержать от 5 до 100 символов")
     @Column(name = "login")
     private String login;
 
@@ -35,4 +38,40 @@ public class User {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Doctor doctor;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Patient patient;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

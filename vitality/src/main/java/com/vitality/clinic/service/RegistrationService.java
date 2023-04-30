@@ -1,8 +1,8 @@
 package com.vitality.clinic.service;
 
 import com.vitality.clinic.model.User;
-import com.vitality.clinic.model.enums.UserRole;
 import com.vitality.clinic.repository.UserRepository;
+import com.vitality.clinic.utils.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
