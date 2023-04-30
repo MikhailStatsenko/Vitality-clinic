@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title>Vitality clinic</title>
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/css/style.css" rel="stylesheet">
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <img src="/static/images/logo.png" width="40">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/home">Домой</a>
+            </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')">
+              <a class="nav-link" href="/admin">Панель администратора</a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+              <a class="nav-link">Мой аккаунт</a>
+            </li>
+            <li sec:authorize="isAuthenticated()" class="nav-item">
+              <form th:action="@{/logout}" method="POST">
+                <input class="nav-link" type="submit" value="Выйти">
+              </form>
+            </li>
+            <li sec:authorize="!isAuthenticated()" class="nav-item">
+              <a class="nav-link" href="/auth/login">Войти в аккаунт</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <main style="height: calc(100vh - 232.8px - 67.6px)">
+
+  </main>
+  <footer class="overflow-hidden pt-4 pt-md-5 pb-3" style="background-color: #f8f9fa; border-top: 1px solid black;">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-6 col-md-4">
+          <h5>Партнеры и спонсоры</h5>
+          <ul class="text-small text-start">
+            <li><a href="https://genetico.ru/" class="link-secondary">Genetico</a></li>
+            <li><a href="https://www.biocad.ru/" class="link-secondary">Биокад</a></li>
+            <li><a href="https://www.generium.ru/" class="link-secondary">Generium</a></li>
+            <li><a href="https://www.rfs.ru/" class="link-secondary">Федерация футбола России</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-6 col-md-4">
+          <h5>Берегите себя</h5>
+          <ul class=" text-small text-start">
+            <li><a href="https://xn----8sbehgcimb3cfabqj3b.xn--p1ai/" class="link-secondary">Правильное питание и здоровый образ жизни</a></li>
+            <li><a href="https://www.who.int/immunization/diseases/en/" class="link-secondary">Вакцинация и профилактика заболеваний</a></li>
+            <li><a href="https://www.nlm.nih.gov/medlineplus/healthyliving.html" class="link-secondary">Уход за здоровьем в различных возрастных категориях</a></li>
+            <li><a href="https://medlineplus.gov/ency/patientinstructions/000655.htm" class="link-secondary">Медицинский справочник</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h5>Контактная информация</h5>
+          <ul class=" text-small text-start">
+            <li>Адрес: Москва, ул. Профсоюзная, д. 115</li>
+            <li>Запись на прием: <a href="tel:+74951234567" class="link-info">+7 (495) 123-45-67</a></li>
+            <li>Справочная служба: <a href="tel:+74957654321" class="link-info">+7 (495) 765-43-21</a></li>
+            <li><a href="mailto:vitality-clinic@yandex.ru" class="link-info">vitality-clinic@yandex.ru</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="/static/js/bootstrap.min.js"></script>
+</body>
+</html>
