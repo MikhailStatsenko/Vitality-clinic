@@ -12,5 +12,4 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     List<Patient> findAllByDateOfBirth(Date dateOfBirth);
     List<Patient> findAllByDateOfBirthAfter(Date dateOfBirth);
     List<Patient> findAllByDateOfBirthBefore(Date dateOfBirth);
-    List<Patient> findAllByLastNameAndFirstNameAndMiddleName(String lastName, String firstName, String middleName);
 }

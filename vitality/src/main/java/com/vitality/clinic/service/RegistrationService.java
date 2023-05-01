@@ -21,9 +21,13 @@ public class RegistrationService {
     }
 
     @Transactional
-    public void register(User user) {
+    public long register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(UserRole.ROLE_PATIENT);
-        userRepository.save(user);
+        user.setRole(UserRole.ROLE_GUEST);
+        return userRepository.save(user).getId();
+    }
+
+    public String encodePassword(String password) {
+        return passwordEncoder.encode((password));
     }
 }

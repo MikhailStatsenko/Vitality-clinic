@@ -1,6 +1,7 @@
 package com.vitality.clinic.service;
 
 import com.vitality.clinic.model.Patient;
+import com.vitality.clinic.model.User;
 import com.vitality.clinic.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,10 +39,6 @@ public class PatientService {
         return patientRepository.findAllByDateOfBirthBefore(dateOfBirth);
     }
 
-    public List<Patient> getPatientsByFullName(String lastName, String firstName, String middleName) {
-        return patientRepository.findAllByLastNameAndFirstNameAndMiddleName(lastName, firstName, middleName);
-    }
-
     public Optional<Long> addPatient(Patient patient) {
         if (patient != null)
             return Optional.of(patientRepository.save(patient).getId());
@@ -50,5 +47,9 @@ public class PatientService {
 
     public void deletePatientById(long id) {
         patientRepository.deleteById(id);
+    }
+
+    public void updatePatient(Patient patient) {
+        patientRepository.save(patient);
     }
 }

@@ -1,3 +1,8 @@
+:root {
+    --my-gray-background: #f2f2f2;
+    --my-border: #d5d5d5;
+}
+
 body {
     background-color: #38d2bb;
 }
@@ -10,6 +15,16 @@ body {
 
 .navbar {
     margin: 0;
-
     border: 1px solid black;
+}
+
+/* Обращение на главной странице */
+.index-message {
+    border-radius: 10px;
+    border: 1px solid var(--my-border);
+    background-color: var(--my-gray-background);
+}
+
+.chief-med-officer-img {
+    max-width: 260px;
 }

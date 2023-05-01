@@ -30,9 +30,9 @@ public class DoctorService {
         return doctorRepository.findAllBySpeciality(specialty);
     }
 
-    public List<Doctor> getDoctorsByFullName(String lastName, String firstName, String middleName) {
-        return doctorRepository.findAllByLastNameAndFirstNameAndMiddleName(lastName, firstName, middleName);
-    }
+//    public List<Doctor> getDoctorsByFullName(String lastName, String firstName, String middleName) {
+//        return doctorRepository.findAllByLastNameAndFirstNameAndMiddleName(lastName, firstName, middleName);
+//    }
 
     public Optional<Long> addDoctor(Doctor doctor) {
         if (doctor != null)
