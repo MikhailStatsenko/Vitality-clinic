@@ -15,5 +15,6 @@ public enum MedicalSpecialty {
     OTORHINOLARYNGOLOGY,
     PEDIATRICS,
     PSYCHIATRY,
-    UROLOGY
+    UROLOGY,
+    ANY // Специальность не указана
 }

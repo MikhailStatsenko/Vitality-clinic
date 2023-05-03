@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeHttpRequests()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/home", "/auth/login", "/auth/registration", "/error", "/static/**").permitAll()
-                .anyRequest().hasAnyRole("PATIENT", "DOCTOR", "ADMIN")
+                .anyRequest().hasAnyRole("PATIENT", "DOCTOR", "ADMIN", "GUEST")
                 .and()
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")

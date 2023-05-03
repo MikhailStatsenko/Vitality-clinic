@@ -24,9 +24,15 @@
           <li sec:authorize="hasRole('ROLE_ADMIN')">
             <a class="nav-link" href="/admin">Панель администратора</a>
           </li>
-          <li sec:authorize="isAuthenticated()" class="nav-item">
-            <a class="nav-link">Личный кабинет</a>
+
+<!--          <li sec:authorize="isAuthenticated()" class="nav-item">-->
+<!--            <a class="nav-link">Личный кабинет</a>-->
+<!--          </li>          -->
+
+          <li sec:authorize="hasRole('ROLE_GUEST')" class="nav-item">
+            <a class="nav-link" th:href="@{/guest/edit/{guestId}(guestId=${#authentication.principal.id})}">Личный кабинет</a>
           </li>
+
           <li sec:authorize="isAuthenticated()" class="nav-item">
             <form th:action="@{/logout}" method="POST">
               <input class="nav-link" type="submit" value="Выйти">

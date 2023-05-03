@@ -1,7 +1,6 @@
 package com.vitality.clinic.service;
 
 import com.vitality.clinic.model.Patient;
-import com.vitality.clinic.model.User;
 import com.vitality.clinic.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

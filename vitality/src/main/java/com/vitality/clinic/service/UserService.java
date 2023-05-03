@@ -3,6 +3,7 @@ package com.vitality.clinic.service;
 
 import com.vitality.clinic.model.User;
 import com.vitality.clinic.repository.UserRepository;
+import com.vitality.clinic.utils.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,10 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return  userRepository.findAll();
+    }
+
+    public List<User> getUsersByRole(UserRole role) {
+        return userRepository.findAllByRole(role);
     }
 
     public User getUserById(long id) {

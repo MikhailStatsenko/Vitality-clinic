@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>Vitality – домашняя страница</title>
@@ -29,7 +29,9 @@
           <p>Мы предоставляем широкий спектр медицинских услуг, включая диагностику, лечение и профилактику различных заболеваний. Мы работаем с самыми современными технологиями и методиками лечения, чтобы обеспечить вам максимально эффективное и комфортное лечение.</p>
           <p>Мы надеемся, что наша поликлиника станет вашим надежным партнером в поддержании здоровья. Желаем вам здоровья и благополучия!</p>
           <p>С уважением, Константин Игоревич Петров</p>
-          <a href="#" class="btn btn-primary mb-1">Записаться на прием</a>
+          <a sec:authorize="!isAuthenticated()" href="/auth/login" class="btn btn-primary mb-1">Записаться на прием</a>
+          <a sec:authorize="hasRole('ROLE_GUEST')" th:href="@{/guest/edit/{guestId}(guestId=${#authentication.principal.id})}" class="btn btn-primary mb-1">Записаться на прием</a>
+          <a sec:authorize="hasRole('ROLE_PATIENT')" class="btn btn-primary mb-1" href="/appointment/schedule?week=0&speciality=ANY">Записаться на прием</a>
         </div>
       </div>
     </div>

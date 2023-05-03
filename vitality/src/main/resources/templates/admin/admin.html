@@ -29,10 +29,10 @@
     <tbody>
     <tr th:each="user, iter : ${users}">
       <td th:text="${iter.count}"></td>
-      <td th:text="${user.lastName} + ' ' + ${user.firstName} + ' ' + ${user.middleName}"></td>
+      <td th:text="${user.lastName == null ? '' : user.lastName} + ' ' + ${user.firstName == null ? '' : user.firstName} + ' ' + ${user.middleName == null ? '' : user.middleName}"></td>
       <td th:text="${user.login}"></td>
       <td th:text="${user.role.name()}"></td>
-      <td th:switch="${user.role.name()}">
+      <td th:switch="${user.role.name()}"  class="text-center">
         <a th:case="'ROLE_PATIENT'" th:href="@{/admin/patient/edit/{patientId}(patientId=${user.patient.id})}">Изменить</a>
         <a th:case="'ROLE_DOCTOR'" th:href="@{/admin/doctor/edit/{doctorId}(doctorId=${user.doctor.id})}">Изменить</a>
         <a th:case="*" th:href="@{/admin/user/edit/{userId}(userId=${user.id})}">Изменить</a>
