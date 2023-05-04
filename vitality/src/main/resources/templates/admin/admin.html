@@ -15,7 +15,21 @@
     <a class="btn btn-outline-primary col-5" href="/admin/doctor/new">Добавить врача</a>
   </div>
   <h3 class="text-center mt-4">Список пользователей</h3>
-  <table class="table table-bordered table-striped table-hover border-success">
+  <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2">
+    <form th:method="GET" th:action="@{/admin}">
+      <div class="input-group mb-3">
+        <select class="form-select" name="role" id="role">
+          <option value="ROLE_ANY">Все роли</option>
+          <option value="ROLE_GUEST">Гость</option>
+          <option value="ROLE_PATIENT">Пациент</option>
+          <option value="ROLE_DOCTOR">Доктор</option>
+          <option value="ROLE_ADMIN">Администратор</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Поиск</button>
+      </div>
+    </form>
+  </div>
+  <table class="table table-bordered table-striped table-hover border-dark">
     <thead>
     <tr>
       <th>#</th>
@@ -31,7 +45,7 @@
       <td th:text="${iter.count}"></td>
       <td th:text="${user.lastName == null ? '' : user.lastName} + ' ' + ${user.firstName == null ? '' : user.firstName} + ' ' + ${user.middleName == null ? '' : user.middleName}"></td>
       <td th:text="${user.login}"></td>
-      <td th:text="${user.role.name()}"></td>
+      <td th:text="#{${user.role.name()}}"></td>
       <td th:switch="${user.role.name()}"  class="text-center">
         <a th:case="'ROLE_PATIENT'" th:href="@{/admin/patient/edit/{patientId}(patientId=${user.patient.id})}">Изменить</a>
         <a th:case="'ROLE_DOCTOR'" th:href="@{/admin/doctor/edit/{doctorId}(doctorId=${user.doctor.id})}">Изменить</a>

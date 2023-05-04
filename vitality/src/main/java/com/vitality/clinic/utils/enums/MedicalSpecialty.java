@@ -16,5 +16,5 @@ public enum MedicalSpecialty {
     PEDIATRICS,
     PSYCHIATRY,
     UROLOGY,
-    ANY // Специальность не указана
+    ANY // Служебное значение, обозначающее все специальности
 }

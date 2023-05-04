@@ -9,7 +9,7 @@
 </head>
 <body>
 <div th:replace="'/page elements/header' :: header"></div>
-  <main style="display: flex; height: 80vh; align-items: center">
+  <main style="display: flex; min-height: 80vh; align-items: center" class="mt-5 mb-5">
     <div class="container auth-form col-xl-4 col-lg-6 col-md-8 col-sm-11">
       <form class="m-4" th:method="POST" th:action="@{/admin/doctor/new}">
         <h4 class="text-center">Новый доктор</h4>
@@ -28,21 +28,9 @@
         <div class="mb-3">
           <label for="speciality" class="form-label">Специальность</label>
           <select class="form-select" name="speciality" id="speciality">
-            <option value="CARDIOLOGY">Кардиолог</option>
-            <option value="DERMATOLOGY">Дерматолог</option>
-            <option value="ENDOCRINOLOGY">Эндокринолог</option>
-            <option value="GASTROENTEROLOGY">Гастроэнтеролог</option>
-            <option value="GYNECOLOGY">Гинеколог</option>
-            <option value="HEMATOLOGY">Гематолог</option>
-            <option value="NEPHROLOGY">Нефролог</option>
-            <option value="NEUROLOGY">Невролог</option>
-            <option value="ONCOLOGY">Онколог</option>
-            <option value="OPHTHALMOLOGY">Офтальмолог</option>
-            <option value="ORTHOPEDICS">Ортопед</option>
-            <option value="OTORHINOLARYNGOLOGY">Отоларинголог</option>
-            <option value="PEDIATRICS">Педиатр</option>
-            <option value="PSYCHIATRY">Психиатр</option>
-            <option value="UROLOGY">Уролог</option>
+            <option th:each="specialty : ${specialties}"
+                    th:value="${specialty.name()}"
+                    th:text="#{${specialty.name()}}"></option>
           </select>
         </div>
         <div class="mb-3">
@@ -52,6 +40,37 @@
         <div class="mb-3">
           <label for="password" class="form-label">Пароль</label>
           <input type="password" class="form-control" name="password" id="password" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Время на прием</label>
+          <input type="number" class="form-control" name="appointmentDuration" id="appointmentDuration" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Расписание работы</label>
+          <div class="row">
+            <div class="col-12">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th>День недели</th>
+                  <th>Время начала работы</th>
+                  <th>Время окончания работы</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="day : ${daysOfWeek}">
+                  <td th:text="#{${day}}"></td>
+                  <td>
+                    <input type="time" class="form-control" th:name="${day} + '_start'">
+                  </td>
+                  <td>
+                    <input type="time" class="form-control" th:name="${day} + '_end'">
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
         <div class="col">
           <button type="submit" class="btn btn-primary">Добавить доктора</button>

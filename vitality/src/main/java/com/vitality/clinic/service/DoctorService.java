@@ -26,21 +26,13 @@ public class DoctorService {
         return doctorRepository.findById(id);
     }
 
-    public List<Doctor> getDoctorBySpeciality(MedicalSpecialty specialty) {
+    public List<Doctor> getDoctorsBySpeciality(MedicalSpecialty specialty) {
         return doctorRepository.findAllBySpeciality(specialty);
     }
-
-//    public List<Doctor> getDoctorsByFullName(String lastName, String firstName, String middleName) {
-//        return doctorRepository.findAllByLastNameAndFirstNameAndMiddleName(lastName, firstName, middleName);
-//    }
 
     public Optional<Long> addDoctor(Doctor doctor) {
         if (doctor != null)
             return Optional.of(doctorRepository.save(doctor).getId());
         return Optional.empty();
-    }
-
-    public void deleteDoctorById(long id) {
-        doctorRepository.deleteById(id);
     }
 }

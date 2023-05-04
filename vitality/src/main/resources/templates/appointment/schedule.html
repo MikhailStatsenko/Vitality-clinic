@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="col">
-        <table class="table table-bordered border-success text-center">
+        <table class="table table-bordered border-dark text-center">
           <thead>
           <tr>
             <th class="align-middle" rowspan="2">ФИО Врача</th>
@@ -62,7 +62,14 @@
           <tr th:each="doctor : ${doctors}">
             <td class="text-start" th:text="${doctor.user.lastName == null ? '' : doctor.user.lastName} + ' ' + ${doctor.user.firstName == null ? '' : doctor.user.firstName} + ' ' + ${doctor.user.middleName == null ? '' : doctor.user.middleName}"></td>
             <td class="text-start" th:text="#{${doctor.speciality}}"></td>
-            <td th:each="date : ${dates}"><a th:href="@{/appointment/schedule/${doctor.id}/${date}}" class="link-secondary">8:00-16:00</a></td>
+            <td th:each="date : ${dates}">
+              <th:block th:each="weekday : ${doctor.schedules}">
+                <th:block th:if="${date.getDayOfWeek() == weekday.getDayOfWeek()}">
+                  <a class="link-light disabled" th:if="${date.isBefore(today)}" th:text="${weekday.workdayStart} + '-' + ${weekday.workdayEnd}"></a>
+                  <a class="link-secondary" th:unless="${date.isBefore(today)}" th:href="@{/appointment/schedule/{doctorId}/{date}(doctorId=${doctor.id}, date=${date})}" th:text="${weekday.workdayStart} + '-' + ${weekday.workdayEnd}"></a>
+                </th:block>
+              </th:block>
+            </td>
           </tr>
           </tbody>
         </table>

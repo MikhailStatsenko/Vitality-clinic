@@ -5,8 +5,10 @@ import com.vitality.clinic.utils.enums.MedicalSpecialty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -23,16 +25,31 @@ public class Doctor {
     @Enumerated(EnumType.STRING)
     private MedicalSpecialty speciality;
 
+    @Column(name = "appointment_duration")
+    private int appointmentDuration;
+
+    @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DoctorSchedule> schedules = new ArrayList<>();
+
     @OneToOne(cascade = CascadeType.ALL,
             orphanRemoval = true)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "doctor",
             cascade = CascadeType.REMOVE,
             orphanRemoval = true)
     private List<Appointment> appointments;
+
+    public void addSchedule(DoctorSchedule schedule) {
+        schedules.add(schedule);
+        schedule.setDoctor(this);
+    }
+
+    public void removeSchedule(DoctorSchedule schedule) {
+        schedules.remove(schedule);
+        schedule.setDoctor(null);
+    }
 
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);

@@ -22,7 +22,7 @@
             <a class="nav-link" href="/home">Домой</a>
           </li>
           <li sec:authorize="hasRole('ROLE_ADMIN')">
-            <a class="nav-link" href="/admin">Панель администратора</a>
+            <a class="nav-link" href="/admin?role=ROLE_ANY">Панель администратора</a>
           </li>
 
 <!--          <li sec:authorize="isAuthenticated()" class="nav-item">-->

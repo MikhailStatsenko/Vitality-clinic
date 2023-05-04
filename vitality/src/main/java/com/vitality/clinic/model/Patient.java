@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -30,7 +31,6 @@ public class Patient {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "patient",
             cascade = CascadeType.REMOVE,
             orphanRemoval = true)
