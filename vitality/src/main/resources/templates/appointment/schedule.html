@@ -18,22 +18,8 @@
             <input type="hidden" name="week" th:value="${param.week}">
             <div class="input-group mb-3">
               <select class="form-select" name="speciality" id="speciality">
-                <option value="ANY">Все специальности</option>
-                <option value="CARDIOLOGY">Кардиолог</option>
-                <option value="DERMATOLOGY">Дерматолог</option>
-                <option value="ENDOCRINOLOGY">Эндокринолог</option>
-                <option value="GASTROENTEROLOGY">Гастроэнтеролог</option>
-                <option value="GYNECOLOGY">Гинеколог</option>
-                <option value="HEMATOLOGY">Гематолог</option>
-                <option value="NEPHROLOGY">Нефролог</option>
-                <option value="NEUROLOGY">Невролог</option>
-                <option value="ONCOLOGY">Онколог</option>
-                <option value="OPHTHALMOLOGY">Офтальмолог</option>
-                <option value="ORTHOPEDICS">Ортопед</option>
-                <option value="OTORHINOLARYNGOLOGY">Отоларинголог</option>
-                <option value="PEDIATRICS">Педиатр</option>
-                <option value="PSYCHIATRY">Психиатр</option>
-                <option value="UROLOGY">Уролог</option>
+                <option value="" selected>Все специальности</option>
+                <option th:each="specialty : ${specialties}" th:value="${specialty}" th:text="#{${specialty}}"></option>
               </select>
               <button type="submit" class="btn btn-primary">Поиск</button>
             </div>
@@ -41,7 +27,7 @@
         </div>
       </div>
       <div class="col">
-        <table class="table table-bordered border-dark text-center">
+        <table class="table table-bordered border-dark text-center bg-light">
           <thead>
           <tr>
             <th class="align-middle" rowspan="2">ФИО Врача</th>
@@ -62,11 +48,10 @@
           <tr th:each="doctor : ${doctors}">
             <td class="text-start" th:text="${doctor.user.lastName == null ? '' : doctor.user.lastName} + ' ' + ${doctor.user.firstName == null ? '' : doctor.user.firstName} + ' ' + ${doctor.user.middleName == null ? '' : doctor.user.middleName}"></td>
             <td class="text-start" th:text="#{${doctor.speciality}}"></td>
-            <td th:each="date : ${dates}">
+            <td th:each="date : ${dates}" class="bg-opacity-25" th:classappend="${!date.isBefore(tomorrow) and availabilityMap.get(doctor.id).get(date).name().equals('AVAILABLE') ? 'bg-success' : (!date.isBefore(tomorrow) and availabilityMap.get(doctor.id).get(date).name().equals('BUSY') ? 'bg-danger' : '')}">
               <th:block th:each="weekday : ${doctor.schedules}">
                 <th:block th:if="${date.getDayOfWeek() == weekday.getDayOfWeek()}">
-                  <a class="link-light disabled" th:if="${date.isBefore(today)}" th:text="${weekday.workdayStart} + '-' + ${weekday.workdayEnd}"></a>
-                  <a class="link-secondary" th:unless="${date.isBefore(today)}" th:href="@{/appointment/schedule/{doctorId}/{date}(doctorId=${doctor.id}, date=${date})}" th:text="${weekday.workdayStart} + '-' + ${weekday.workdayEnd}"></a>
+                  <a class="link text-decoration-none" th:classappend="${date.isBefore(tomorrow) ? 'disabled' : ''}" th:href="@{/appointment/schedule/{doctorId}/{date}(doctorId=${doctor.id}, date=${date})}" th:text="${weekday.workdayStart} + '-' + ${weekday.workdayEnd}"></a>
                 </th:block>
               </th:block>
             </td>

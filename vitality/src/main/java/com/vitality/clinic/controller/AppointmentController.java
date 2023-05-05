@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/appointment")
@@ -24,19 +26,26 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     @Autowired
-    public AppointmentController(DoctorService doctorService, PatientService patientService, AppointmentService appointmentService) {
+    public AppointmentController(DoctorService doctorService,
+                                 PatientService patientService,
+                                 AppointmentService appointmentService) {
         this.doctorService = doctorService;
         this.patientService = patientService;
         this.appointmentService = appointmentService;
     }
 
     @GetMapping("/schedule")
-    public String globalSchedulePage(@RequestParam MedicalSpecialty speciality, @RequestParam int week, Model model) {
-        model.addAttribute("today", LocalDate.now());
+    public String globalSchedulePage(@RequestParam(required = false) MedicalSpecialty speciality,
+                                     @RequestParam int week, Model model) {
+        List<LocalDate> dates = appointmentService.getDatesOfWeek(week);
+        List<Doctor> doctors = speciality == null ?
+                doctorService.getAllDoctors() : doctorService.getDoctorsBySpeciality(speciality);
+
+        model.addAttribute("dates", dates);
+        model.addAttribute("doctors", doctors);
+        model.addAttribute("availabilityMap", appointmentService.getAvailabilityMap(doctors, dates));
         model.addAttribute("specialties", MedicalSpecialty.values());
-        model.addAttribute("dates", appointmentService.getDatesOfWeek(week));
-        model.addAttribute("doctors", speciality.equals(MedicalSpecialty.ANY) ?
-                        doctorService.getAllDoctors() : doctorService.getDoctorsBySpeciality(speciality));
+        model.addAttribute("tomorrow", LocalDate.now().plusDays(1));
         return "/appointment/schedule";
     }
 

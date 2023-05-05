@@ -17,4 +17,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> findAllByPatient(Patient patient);
 
     List<Appointment> findAllByDoctorAndDateAfter(Doctor doctor, LocalDate date);
+
+    void deleteAllByDoctor(Doctor doctor);
 }

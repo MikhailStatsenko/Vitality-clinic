@@ -31,7 +31,7 @@
           <p>С уважением, Константин Игоревич Петров</p>
           <a sec:authorize="!isAuthenticated()" href="/auth/login" class="btn btn-primary mb-1">Записаться на прием</a>
           <a sec:authorize="hasRole('ROLE_GUEST')" th:href="@{/guest/edit/{guestId}(guestId=${#authentication.principal.id})}" class="btn btn-primary mb-1">Записаться на прием</a>
-          <a sec:authorize="hasRole('ROLE_PATIENT')" class="btn btn-primary mb-1" href="/appointment/schedule?week=0&speciality=ANY">Записаться на прием</a>
+          <a sec:authorize="hasRole('ROLE_PATIENT')" class="btn btn-primary mb-1" href="/appointment/schedule?week=0">Записаться на прием</a>
         </div>
       </div>
     </div>

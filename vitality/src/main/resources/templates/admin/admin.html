@@ -19,11 +19,8 @@
     <form th:method="GET" th:action="@{/admin}">
       <div class="input-group mb-3">
         <select class="form-select" name="role" id="role">
-          <option value="ROLE_ANY">Все роли</option>
-          <option value="ROLE_GUEST">Гость</option>
-          <option value="ROLE_PATIENT">Пациент</option>
-          <option value="ROLE_DOCTOR">Доктор</option>
-          <option value="ROLE_ADMIN">Администратор</option>
+          <option value="" selected>Все роли</option>
+          <option th:each="role : ${roles}" th:value="${role}" th:text="#{${role}}">
         </select>
         <button type="submit" class="btn btn-primary">Поиск</button>
       </div>
@@ -47,11 +44,15 @@
       <td th:text="${user.login}"></td>
       <td th:text="#{${user.role.name()}}"></td>
       <td th:switch="${user.role.name()}"  class="text-center">
-        <a th:case="'ROLE_PATIENT'" th:href="@{/admin/patient/edit/{patientId}(patientId=${user.patient.id})}">Изменить</a>
+        <a th:case="'ROLE_PATIENT'" th:href="@{/patient/edit/{patientId}(patientId=${user.patient.id})}">Изменить</a>
         <a th:case="'ROLE_DOCTOR'" th:href="@{/admin/doctor/edit/{doctorId}(doctorId=${user.doctor.id})}">Изменить</a>
         <a th:case="*" th:href="@{/admin/user/edit/{userId}(userId=${user.id})}">Изменить</a>
       </td>
-      <td class="text-center"><form method="POST" th:action="@{/admin/user/delete/{userId}(userId=${user.id})}"><button type="submit" class="btn btn-link">Удалить</button></form></td>
+      <td class="text-center">
+        <form method="POST" th:action="@{/admin/user/delete/{userId}(userId=${user.id}, role=${param.role})}">
+          <button type="submit" class="btn btn-link">Удалить</button>
+        </form>
+      </td>
     </tr>
     </tbody>
   </table>

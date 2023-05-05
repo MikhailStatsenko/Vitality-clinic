@@ -35,8 +35,9 @@ public class AdminController {
     }
 
     @GetMapping("")
-    public String adminPage(@RequestParam UserRole role, Model model) {
-        model.addAttribute("users", role.equals(UserRole.ROLE_ANY) ?
+    public String adminPage(@RequestParam(required = false) UserRole role, Model model) {
+        model.addAttribute("roles", UserRole.values());
+        model.addAttribute("users", role == null ?
                 userService.getAllUsers() : userService.getUsersByRole(role));
         return "/admin/admin";
     }
@@ -56,13 +57,13 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/patient/edit/{patientId}")
-    public String editPatientPage(@PathVariable long patientId, Model model) {
-        Patient patient = patientService.getPatientById(patientId).get();
-        model.addAttribute("patient", patient);
-        model.addAttribute("user", patient.getUser());
-        return "/admin/edit-patient";
-    }
+//    @GetMapping("/patient/edit/{patientId}")
+//    public String editPatientPage(@PathVariable long patientId, Model model) {
+//        Patient patient = patientService.getPatientById(patientId).get();
+//        model.addAttribute("patient", patient);
+//        model.addAttribute("user", patient.getUser());
+//        return "/admin/edit-patient";
+//    }
 
     @PostMapping("/patient/edit/{patientId}")
     public String editPatient(@ModelAttribute Patient patient,
@@ -142,8 +143,9 @@ public class AdminController {
 
 
     @PostMapping("/user/delete/{userId}")
-    public String deleteUser(@PathVariable long userId) {
+    public String deleteUser(@PathVariable long userId,
+                             @RequestParam(required = false) UserRole role) {
         userService.deleteUserById(userId);
-        return "redirect:/admin";
+        return "redirect:/admin?role=" + (role != null ? role : "");
     }
 }

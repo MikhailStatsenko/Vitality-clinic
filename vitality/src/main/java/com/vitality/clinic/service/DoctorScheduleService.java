@@ -2,6 +2,7 @@ package com.vitality.clinic.service;
 
 import com.vitality.clinic.model.Doctor;
 import com.vitality.clinic.model.DoctorSchedule;
+import com.vitality.clinic.repository.AppointmentRepository;
 import com.vitality.clinic.repository.DoctorScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +15,19 @@ import java.util.Map;
 
 @Service
 public class DoctorScheduleService {
+    private final AppointmentRepository appointmentRepository;
     private final DoctorScheduleRepository doctorScheduleRepository;
 
     @Autowired
-    public DoctorScheduleService(DoctorScheduleRepository doctorScheduleRepository) {
+    public DoctorScheduleService(AppointmentRepository appointmentRepository,
+                                 DoctorScheduleRepository doctorScheduleRepository) {
+        this.appointmentRepository = appointmentRepository;
         this.doctorScheduleRepository = doctorScheduleRepository;
     }
 
     @Transactional
     public void makeDoctorScheduleFromRequest(Doctor doctor, HttpServletRequest request) {
+        appointmentRepository.deleteAllByDoctor(doctor); //TODO
         doctorScheduleRepository.deleteAllByDoctor(doctor);
 
         Map<String, String[]> params = request.getParameterMap();

@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <title>Изменение данных пациента</title>
   <link rel="icon" type="image/ico" href="/images/favicon.ico">
-  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/static/css/style.css" rel="stylesheet">
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/style.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="'/page elements/header' :: header"></div>
 <main style="display: flex; height: 80vh; align-items: center">
   <div class="container auth-form col-xl-4 col-lg-6 col-md-8 col-sm-11">
-    <form class="m-4" th:method="POST" th:action="@{/admin/patient/edit/{patientId}(patientId=${user.patient.id})}">
+    <form class="m-4" th:method="POST" th:action="${user.role.name().equals('ROLE_ADMIN') ? '/admin/patient/edit/' + user.patient.id : '/patient/edit/' + user.patient.id}">
       <h4 class="text-center">Изменить данные пациента</h4>
       <div class="mb-3">
         <label for="last_name" class="form-label">Фамилия</label>
