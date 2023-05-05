@@ -30,6 +30,21 @@
           <label for="date-of-birth" class="form-label">Дата рождения</label>
           <input type="date" class="form-control" name="dateOfBirth" id="date-of-birth">
         </div>
+        <label for="gender" class="form-label">Пол</label>
+        <select class="form-select" name="gender" id="gender">
+          <option th:each="gender : ${genders}"
+                  th:value="${gender.name()}"
+                  th:text="#{${gender.name()}}"></option>
+        </select>
+<!--        <label class="form-label mb-1">Пол</label><br>-->
+<!--        <div class="form-check form-check-inline" th:each="gender : ${genders}">-->
+<!--          <input class="form-check-input" type="radio" name="gender" th:value="${gender.name()}">-->
+<!--          <label class="form-check-label" th:text="#{${gender.name()}}"></label>-->
+<!--        </div>-->
+<!--        <div class="form-check form-check-inline mb-3">-->
+<!--          <input class="form-check-input" type="radio" name="gender" id="female" th:value="${genders[1]}">-->
+<!--          <label class="form-check-label" for="female">Женский</label>-->
+<!--        </div>-->
         <div class="mb-3">
           <label for="username" class="form-label">Адрес электронной почты</label>
           <input type="email" class="form-control" name="login" id="username" required>

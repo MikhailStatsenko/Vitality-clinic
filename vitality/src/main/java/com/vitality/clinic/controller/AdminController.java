@@ -4,6 +4,7 @@ import com.vitality.clinic.model.Doctor;
 import com.vitality.clinic.model.Patient;
 import com.vitality.clinic.model.User;
 import com.vitality.clinic.service.*;
+import com.vitality.clinic.utils.enums.Gender;
 import com.vitality.clinic.utils.enums.MedicalSpecialty;
 import com.vitality.clinic.utils.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,8 @@ public class AdminController {
     }
 
     @GetMapping("/patient/new")
-    public String addPatientPage() {
+    public String addPatientPage(Model model) {
+        model.addAttribute("genders", Gender.values());
         return "/admin/new-patient";
     }
 
@@ -57,13 +59,14 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-//    @GetMapping("/patient/edit/{patientId}")
-//    public String editPatientPage(@PathVariable long patientId, Model model) {
-//        Patient patient = patientService.getPatientById(patientId).get();
-//        model.addAttribute("patient", patient);
-//        model.addAttribute("user", patient.getUser());
-//        return "/admin/edit-patient";
-//    }
+    @GetMapping("patient/edit/{patientId}")
+    public String editPatientPage(@PathVariable long patientId, Model model) {
+        Patient patient = patientService.getPatientById(patientId).get();
+        model.addAttribute("genders", Gender.values());
+        model.addAttribute("patient", patient);
+        model.addAttribute("user", patient.getUser());
+        return "/admin/edit-patient";
+    }
 
     @PostMapping("/patient/edit/{patientId}")
     public String editPatient(@ModelAttribute Patient patient,
@@ -71,6 +74,7 @@ public class AdminController {
                               @PathVariable long patientId) {
         Patient existingPatient = patientService.getPatientById(patientId).get();
         existingPatient.setDateOfBirth(patient.getDateOfBirth());
+        existingPatient.setGender(patient.getGender());
         User existingUser = existingPatient.getUser();
         existingUser = userService.updateExistingUserObject(existingUser, user);
         userService.updateUser(existingUser);

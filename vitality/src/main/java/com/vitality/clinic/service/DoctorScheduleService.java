@@ -4,6 +4,7 @@ import com.vitality.clinic.model.Doctor;
 import com.vitality.clinic.model.DoctorSchedule;
 import com.vitality.clinic.repository.AppointmentRepository;
 import com.vitality.clinic.repository.DoctorScheduleRepository;
+import com.vitality.clinic.utils.enums.AppointmentStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class DoctorScheduleService {
 
     @Transactional
     public void makeDoctorScheduleFromRequest(Doctor doctor, HttpServletRequest request) {
-        appointmentRepository.deleteAllByDoctor(doctor); //TODO
+        appointmentRepository.deleteAllByDoctorAndStatus(doctor, AppointmentStatus.ACTIVE); //TODO
         doctorScheduleRepository.deleteAllByDoctor(doctor);
 
         Map<String, String[]> params = request.getParameterMap();

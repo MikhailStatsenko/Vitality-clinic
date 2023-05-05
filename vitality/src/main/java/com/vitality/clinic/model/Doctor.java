@@ -28,6 +28,9 @@ public class Doctor {
     @Column(name = "appointment_duration")
     private int appointmentDuration;
 
+    @Column(name = "room")
+    private int room;
+
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DoctorSchedule> schedules = new ArrayList<>();
 

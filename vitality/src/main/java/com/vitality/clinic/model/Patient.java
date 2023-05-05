@@ -1,6 +1,7 @@
 package com.vitality.clinic.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vitality.clinic.utils.enums.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,6 +26,10 @@ public class Patient {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
+
+    @Column(name = "gender")
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @OneToOne(cascade = CascadeType.ALL,
             orphanRemoval = true)

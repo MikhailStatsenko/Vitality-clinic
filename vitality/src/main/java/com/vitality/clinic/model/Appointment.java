@@ -1,6 +1,7 @@
 package com.vitality.clinic.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vitality.clinic.utils.enums.AppointmentStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,7 +14,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@ToString
 @Getter
 @Setter
 @NoArgsConstructor
@@ -40,6 +40,10 @@ public class Appointment {
 
     @Column(name = "start_time")
     private LocalTime startTime;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private AppointmentStatus status;
 
     public Appointment(Doctor doctor, Patient patient, LocalDate date, LocalTime startTime) {
         this.doctor = doctor;

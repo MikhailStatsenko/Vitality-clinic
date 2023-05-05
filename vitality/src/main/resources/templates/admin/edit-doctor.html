@@ -46,6 +46,10 @@
           <input type="number" class="form-control" name="appointmentDuration" id="appointmentDuration" required th:field="${doctor.appointmentDuration}">
         </div>
         <div class="mb-3">
+          <label for="room" class="form-label">Кабинет</label>
+          <input type="number" class="form-control" name="room" id="room" required th:field="${doctor.room}">
+        </div>
+        <div class="mb-3">
           <label class="form-label">Расписание работы</label>
           <div class="row">
             <div class="col-12">

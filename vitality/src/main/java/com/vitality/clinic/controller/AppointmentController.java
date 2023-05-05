@@ -5,6 +5,7 @@ import com.vitality.clinic.model.Doctor;
 import com.vitality.clinic.service.AppointmentService;
 import com.vitality.clinic.service.DoctorService;
 import com.vitality.clinic.service.PatientService;
+import com.vitality.clinic.utils.enums.AppointmentStatus;
 import com.vitality.clinic.utils.enums.MedicalSpecialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -69,5 +70,14 @@ public class AppointmentController {
                                   @RequestParam LocalTime startTime) {
         appointmentService.addAppointment(doctorId, patientId, date, startTime);
         return "redirect:/home";
+    }
+
+    @PostMapping("/cancel")
+    public String cancelAppointment(@RequestParam long appointmentId,
+                                    @RequestParam long patientId) {
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId).get();
+        appointment.setStatus(AppointmentStatus.CANCELED);
+        appointmentService.updateAppointment(appointment);
+        return "redirect:/patient/appointments/" + patientId;
     }
 }

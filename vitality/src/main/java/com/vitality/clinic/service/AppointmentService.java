@@ -8,6 +8,7 @@ import com.vitality.clinic.repository.AppointmentRepository;
 import com.vitality.clinic.repository.DoctorRepository;
 import com.vitality.clinic.repository.DoctorScheduleRepository;
 import com.vitality.clinic.repository.PatientRepository;
+import com.vitality.clinic.utils.enums.AppointmentStatus;
 import com.vitality.clinic.utils.enums.DayAvailability;
 import org.springframework.stereotype.Service;
 
@@ -68,6 +69,7 @@ public class AppointmentService {
                 () -> new EntityNotFoundException("Patient not found"));
 
         Appointment appointment = new Appointment(doctor, patient, date, startTime);
+        appointment.setStatus(AppointmentStatus.ACTIVE);
         doctor.addAppointment(appointment);
         patient.addAppointment(appointment);
 
@@ -81,6 +83,10 @@ public class AppointmentService {
         appointmentRepository.delete(appointment);
     }
 
+    public long updateAppointment(Appointment appointment) {
+        return appointmentRepository.save(appointment).getId();
+    }
+
     public List<LocalDate> getDatesOfWeek(int weekFromNow) {
         LocalDate startOfWeek = LocalDate.now().with(DayOfWeek.MONDAY).plusDays(7L * weekFromNow);
         List<LocalDate> datesOfWeek = new ArrayList<>(7);
@@ -90,7 +96,8 @@ public class AppointmentService {
     }
 
     public List<LocalTime> getAvailableTimeForDoctorByDate(Doctor doctor, LocalDate date) {
-        Optional<DoctorSchedule> scheduleOptional = doctorScheduleRepository.getByDoctorAndDayOfWeek(doctor, date.getDayOfWeek());
+        Optional<DoctorSchedule> scheduleOptional =
+                doctorScheduleRepository.getByDoctorAndDayOfWeek(doctor, date.getDayOfWeek());
         if (scheduleOptional.isEmpty())
             return null;
 
@@ -105,7 +112,8 @@ public class AppointmentService {
             start = start.plusMinutes(duration);
         }
 
-        List<Appointment> appointments = appointmentRepository.findAllByDoctorAndDate(doctor, date);
+        List<Appointment> appointments =
+                appointmentRepository.findAllByDoctorAndDateAndStatus(doctor, date, AppointmentStatus.ACTIVE);
         for (Appointment appointment : appointments) {
             availableTime.remove(appointment.getStartTime());
         }
@@ -120,7 +128,6 @@ public class AppointmentService {
                 List<LocalTime> availableTime = this.getAvailableTimeForDoctorByDate(doctor, date);
                 dateAvailabilityMap.put(date, availableTime == null ? DayAvailability.NOT_IN_SCHEDULE :
                         availableTime.size() == 0 ? DayAvailability.BUSY : DayAvailability.AVAILABLE);
-//                dateAvailabilityMap.put(date, availableTime != null && availableTime.size() != 0);
             }
             availabilityMap.put(doctor.getId(), dateAvailabilityMap);
         }

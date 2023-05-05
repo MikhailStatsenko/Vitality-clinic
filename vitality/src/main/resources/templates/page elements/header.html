@@ -25,10 +25,10 @@
             <a class="nav-link" href="/admin">Панель администратора</a>
           </li>
           <li sec:authorize="hasRole('ROLE_PATIENT')" class="nav-item">
-            <a class="nav-link" th:href="@{/patient/edit/{patientId}(patientId = ${#authentication.principal.patient.id})}">Изменить личные данные</a>
+            <a class="nav-link" th:href="@{/patient/edit/{patientId}(patientId = ${#authentication.principal.patient.id})}">Изменить профиль</a>
           </li>
           <li sec:authorize="hasRole('ROLE_PATIENT')" class="nav-item">
-            <a class="nav-link" th:href="@{/home}">Мои записи</a>
+            <a class="nav-link" th:href="@{/patient/appointments/{patientId}(patientId = ${#authentication.principal.patient.id})}">Мои записи</a>
           </li>
           <li sec:authorize="isAuthenticated()" class="nav-item">
             <form th:action="@{/logout}" method="POST">
