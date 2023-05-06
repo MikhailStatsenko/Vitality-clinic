@@ -1,5 +1,6 @@
 package com.vitality.clinic.service;
 
+import com.vitality.clinic.model.Appointment;
 import com.vitality.clinic.model.Doctor;
 import com.vitality.clinic.model.DoctorSchedule;
 import com.vitality.clinic.repository.AppointmentRepository;
@@ -12,23 +13,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class DoctorScheduleService {
+    private final EmailService emailService;
     private final AppointmentRepository appointmentRepository;
     private final DoctorScheduleRepository doctorScheduleRepository;
 
     @Autowired
-    public DoctorScheduleService(AppointmentRepository appointmentRepository,
+    public DoctorScheduleService(EmailService emailService,
+                                 AppointmentRepository appointmentRepository,
                                  DoctorScheduleRepository doctorScheduleRepository) {
+        this.emailService = emailService;
         this.appointmentRepository = appointmentRepository;
         this.doctorScheduleRepository = doctorScheduleRepository;
     }
 
     @Transactional
     public void makeDoctorScheduleFromRequest(Doctor doctor, HttpServletRequest request) {
-        appointmentRepository.deleteAllByDoctorAndStatus(doctor, AppointmentStatus.ACTIVE); //TODO
+        List<Appointment> appointmentsToDelete =
+                appointmentRepository.findAllByDoctorAndStatus(doctor, AppointmentStatus.ACTIVE);
+        for (Appointment appointment : appointmentsToDelete)
+            emailService.appointmentMessage(appointment, AppointmentStatus.CANCELED);
+
+        appointmentRepository.deleteAllByDoctorAndStatus(doctor, AppointmentStatus.ACTIVE);
         doctorScheduleRepository.deleteAllByDoctor(doctor);
 
         Map<String, String[]> params = request.getParameterMap();

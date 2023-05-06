@@ -6,6 +6,7 @@ import com.vitality.clinic.utils.enums.MedicalSpecialty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class DoctorService {
         return doctorRepository.findAllBySpeciality(specialty);
     }
 
+    @Transactional
     public Optional<Long> addDoctor(Doctor doctor) {
         if (doctor != null)
             return Optional.of(doctorRepository.save(doctor).getId());

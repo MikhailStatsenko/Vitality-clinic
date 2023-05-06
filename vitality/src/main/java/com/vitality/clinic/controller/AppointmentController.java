@@ -4,7 +4,7 @@ import com.vitality.clinic.model.Appointment;
 import com.vitality.clinic.model.Doctor;
 import com.vitality.clinic.service.AppointmentService;
 import com.vitality.clinic.service.DoctorService;
-import com.vitality.clinic.service.PatientService;
+import com.vitality.clinic.service.EmailService;
 import com.vitality.clinic.utils.enums.AppointmentStatus;
 import com.vitality.clinic.utils.enums.MedicalSpecialty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,23 +15,21 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/appointment")
 public class AppointmentController {
+    private final EmailService emailService;
     private final DoctorService doctorService;
-    private final PatientService patientService;
     private final AppointmentService appointmentService;
 
     @Autowired
-    public AppointmentController(DoctorService doctorService,
-                                 PatientService patientService,
+    public AppointmentController(EmailService emailService,
+                                 DoctorService doctorService,
                                  AppointmentService appointmentService) {
+        this.emailService = emailService;
         this.doctorService = doctorService;
-        this.patientService = patientService;
         this.appointmentService = appointmentService;
     }
 
@@ -77,7 +75,17 @@ public class AppointmentController {
                                     @RequestParam long patientId) {
         Appointment appointment = appointmentService.getAppointmentById(appointmentId).get();
         appointment.setStatus(AppointmentStatus.CANCELED);
+        emailService.appointmentMessage(appointment, AppointmentStatus.CANCELED);
         appointmentService.updateAppointment(appointment);
         return "redirect:/patient/appointments/" + patientId;
+    }
+
+    @PostMapping("/complete")
+    public String completeAppointment(@RequestParam long appointmentId,
+                                    @RequestParam long doctorId) {
+        Appointment appointment = appointmentService.getAppointmentById(appointmentId).get();
+        appointment.setStatus(AppointmentStatus.COMPLETED);
+        appointmentService.updateAppointment(appointment);
+        return "redirect:/doctor/appointments/" + doctorId;
     }
 }

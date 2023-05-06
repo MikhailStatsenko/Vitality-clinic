@@ -13,6 +13,7 @@ import com.vitality.clinic.utils.enums.DayAvailability;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,46 +21,42 @@ import java.util.*;
 
 @Service
 public class AppointmentService {
+    private final EmailService emailService;
     private final DoctorRepository doctorRepository;
     private final PatientRepository patientRepository;
     private final AppointmentRepository appointmentRepository;
     private final DoctorScheduleRepository doctorScheduleRepository;
 
-    public AppointmentService(DoctorRepository doctorRepository,
+    public AppointmentService(EmailService emailService,
+                              DoctorRepository doctorRepository,
                               PatientRepository patientRepository,
                               AppointmentRepository appointmentRepository,
                               DoctorScheduleRepository doctorScheduleRepository) {
+        this.emailService = emailService;
         this.doctorRepository = doctorRepository;
         this.patientRepository = patientRepository;
         this.appointmentRepository = appointmentRepository;
         this.doctorScheduleRepository = doctorScheduleRepository;
     }
 
-
-    public List<Appointment> getAllAppointments() {
-        return appointmentRepository.findAll();
-    }
-
-    public List<Appointment> getAppointmentsByDoctorAndDate(Doctor doctor, LocalDate date) {
-        return appointmentRepository.findAllByDoctorAndDate(doctor, date);
-    }
-
     public Optional<Appointment> getAppointmentById(long id) {
         return appointmentRepository.findById(id);
-    }
-
-    public List<Appointment> getAppointmentsByDoctor(Doctor doctor) {
-        return appointmentRepository.findAllByDoctor(doctor);
     }
 
     public List<Appointment> getAppointmentsByPatient(Patient patient) {
         return appointmentRepository.findAllByPatient(patient);
     }
 
-    public List<Appointment> getAppointmentsAfterDateForDoctor(Doctor doctor, LocalDate date) {
-        return appointmentRepository.findAllByDoctorAndDateAfter(doctor, date);
+    public List<Appointment> getAppointmentsByDoctorAndStatus(Doctor doctor, AppointmentStatus status) {
+        return appointmentRepository.findAllByDoctorAndStatus(doctor, status);
     }
 
+    public List<Appointment> getAppointmentsByDoctorAndDateAndStatus(Doctor doctor,
+                                                                     LocalDate date, AppointmentStatus status) {
+        return appointmentRepository.findAllByDoctorAndDateAndStatus(doctor, date, status);
+    }
+
+    @Transactional
     public long addAppointment(
             long doctorId, long patientId, LocalDate date, LocalTime startTime) {
 
@@ -69,6 +66,9 @@ public class AppointmentService {
                 () -> new EntityNotFoundException("Patient not found"));
 
         Appointment appointment = new Appointment(doctor, patient, date, startTime);
+
+        emailService.appointmentMessage(appointment, AppointmentStatus.ACTIVE);
+
         appointment.setStatus(AppointmentStatus.ACTIVE);
         doctor.addAppointment(appointment);
         patient.addAppointment(appointment);
@@ -76,13 +76,7 @@ public class AppointmentService {
         return appointmentRepository.save(appointment).getId();
     }
 
-    public void deleteAppointmentById(long id) {
-        Appointment appointment = appointmentRepository.getById(id);
-        appointment.getDoctor().removeAppointment(appointment);
-        appointment.getPatient().removeAppointment(appointment);
-        appointmentRepository.delete(appointment);
-    }
-
+    @Transactional
     public long updateAppointment(Appointment appointment) {
         return appointmentRepository.save(appointment).getId();
     }
@@ -132,5 +126,25 @@ public class AppointmentService {
             availabilityMap.put(doctor.getId(), dateAvailabilityMap);
         }
         return availabilityMap;
+    }
+
+    public void sortAppointmentsList(List<Appointment> appointments) {
+        appointments.sort((a1, a2) -> {
+            int dateComparison = a1.getDate().compareTo(a2.getDate());
+            if (dateComparison == 0)
+                return a1.getStartTime().compareTo(a2.getStartTime());
+            else
+                return dateComparison;
+        });
+    }
+
+    public List<LocalDate> getSortedListOfDates(List<Appointment> appointments) {
+        Set<LocalDate> dateSet = new HashSet<>();
+        for (Appointment appointment : appointments) {
+            dateSet.add(appointment.getDate());
+        }
+        List<LocalDate> dateList = new ArrayList<>(dateSet);
+        Collections.sort(dateList);
+        return dateList;
     }
 }

@@ -12,15 +12,8 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-    List<Appointment> findAllByDoctor(Doctor doctor);
-
-    List<Appointment> findAllByDoctorAndDate(Doctor doctor, LocalDate date);
-
     List<Appointment> findAllByDoctorAndDateAndStatus(Doctor doctor, LocalDate date, AppointmentStatus status);
+    List<Appointment> findAllByDoctorAndStatus(Doctor doctor, AppointmentStatus status);
     List<Appointment> findAllByPatient(Patient patient);
-
-    List<Appointment> findAllByDoctorAndDateAfter(Doctor doctor, LocalDate date);
-
-    void deleteAllByDoctor(Doctor doctor);
     void deleteAllByDoctorAndStatus(Doctor doctor, AppointmentStatus status);
 }

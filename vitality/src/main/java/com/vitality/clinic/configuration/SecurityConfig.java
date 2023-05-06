@@ -4,6 +4,7 @@ import com.vitality.clinic.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     @Autowired
@@ -21,8 +23,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
-                .antMatchers("/admin").hasRole("ADMIN")
-                .antMatchers("/home", "/auth/login", "/auth/registration", "/error", "/static/**").permitAll()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/doctor/**").hasAnyRole("DOCTOR", "ADMIN")
+                .antMatchers("/patient/**").hasAnyRole("PATIENT", "ADMIN")
+                .antMatchers("/guest/**").hasAnyRole("GUEST")
+                .antMatchers("/appointment/**").hasAnyRole("DOCTOR", "PATIENT", "ADMIN")
+                .antMatchers("/home", "/auth/**", "/error", "/static/**").permitAll()
                 .anyRequest().hasAnyRole("PATIENT", "DOCTOR", "ADMIN", "GUEST")
                 .and()
                 .formLogin().loginPage("/auth/login")

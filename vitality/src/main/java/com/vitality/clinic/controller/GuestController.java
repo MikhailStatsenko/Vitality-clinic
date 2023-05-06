@@ -3,8 +3,10 @@ package com.vitality.clinic.controller;
 import com.vitality.clinic.model.Patient;
 import com.vitality.clinic.model.User;
 import com.vitality.clinic.service.UserService;
+import com.vitality.clinic.utils.enums.Gender;
 import com.vitality.clinic.utils.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,14 +21,17 @@ public class GuestController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('GUEST') and #guestId == principal.id")
     @GetMapping("/edit/{guestId}")
-    public String editUserPage(@PathVariable long  guestId, Model model) {
+    public String guestToPatientPage(@PathVariable long  guestId, Model model) {
         User user = userService.getUserById(guestId);
         model.addAttribute("user", user);
         model.addAttribute("patient", new Patient());
+        model.addAttribute("genders", Gender.values());
         return "/guest/add-patient-data-to-guest";
     }
 
+    @PreAuthorize("hasRole('GUEST') and #guestId == principal.id")
     @PostMapping("/edit/{guestId}")
     public String guestToPatient(@ModelAttribute User user,
                                  @ModelAttribute Patient patient,

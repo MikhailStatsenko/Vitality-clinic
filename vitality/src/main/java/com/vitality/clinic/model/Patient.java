@@ -1,15 +1,13 @@
 package com.vitality.clinic.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vitality.clinic.utils.enums.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -22,10 +20,9 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date_of_birth")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
-    private Date dateOfBirth;
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
 
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
@@ -44,10 +41,5 @@ public class Patient {
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
         appointment.setPatient(this);
-    }
-
-    public void removeAppointment(Appointment appointment) {
-        appointments.remove(appointment);
-        appointment.setPatient(null);
     }
 }

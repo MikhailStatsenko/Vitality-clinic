@@ -1,11 +1,9 @@
 package com.vitality.clinic.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vitality.clinic.utils.enums.MedicalSpecialty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -49,18 +47,8 @@ public class Doctor {
         schedule.setDoctor(this);
     }
 
-    public void removeSchedule(DoctorSchedule schedule) {
-        schedules.remove(schedule);
-        schedule.setDoctor(null);
-    }
-
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
         appointment.setDoctor(this);
-    }
-
-    public void removeAppointment(Appointment appointment) {
-        appointments.remove(appointment);
-        appointment.setDoctor(null);
     }
 }

@@ -7,6 +7,7 @@ import com.vitality.clinic.utils.enums.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -35,12 +36,14 @@ public class UserService {
         return userRepository.findByLogin(login).orElse(null);
     }
 
-    public long addUser(User user) {
-        return userRepository.save(user).getId();
-    }
-
+    @Transactional
     public void updateUser(User user) {
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUserById(long userId) {
+        userRepository.deleteById(userId);
     }
 
     public User updateExistingUserObject(User existingUser, User newUser) {
@@ -50,9 +53,5 @@ public class UserService {
         existingUser.setLogin(newUser.getLogin());
         existingUser.setPassword(registrationService.encodePassword(newUser.getPassword()));
         return existingUser;
-    }
-
-    public void deleteUserById(long userId) {
-        userRepository.deleteById(userId);
     }
 }

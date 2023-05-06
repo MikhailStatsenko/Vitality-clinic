@@ -51,7 +51,8 @@
             <td th:each="date : ${dates}" class="bg-opacity-25" th:classappend="${!date.isBefore(tomorrow) and availabilityMap.get(doctor.id).get(date).name().equals('AVAILABLE') ? 'bg-success' : (!date.isBefore(tomorrow) and availabilityMap.get(doctor.id).get(date).name().equals('BUSY') ? 'bg-danger' : '')}">
               <th:block th:each="weekday : ${doctor.schedules}">
                 <th:block th:if="${date.getDayOfWeek() == weekday.getDayOfWeek()}">
-                  <a class="link text-decoration-none" th:classappend="${date.isBefore(tomorrow) ? 'disabled' : ''}" th:href="@{/appointment/schedule/{doctorId}/{date}(doctorId=${doctor.id}, date=${date})}" th:text="${weekday.workdayStart} + '-' + ${weekday.workdayEnd}"></a>
+                  <a class="link text-decoration-none" th:if="${date.isBefore(tomorrow)}" th:text="${weekday.workdayStart} + '-' + ${weekday.workdayEnd}"></a>
+                  <a class="link text-decoration-none" th:unless="${date.isBefore(tomorrow)}" th:href="@{/appointment/schedule/{doctorId}/{date}(doctorId=${doctor.id}, date=${date})}" th:text="${weekday.workdayStart} + '-' + ${weekday.workdayEnd}"></a>
                 </th:block>
               </th:block>
             </td>

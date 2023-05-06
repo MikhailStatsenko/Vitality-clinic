@@ -20,7 +20,7 @@
         </thead>
         <tbody>
         <tr>
-          <td rowspan="2" class="align-middle" th:text="${doctor.user.lastName == null ? '' : doctor.user.lastName} + ' ' + ${doctor.user.firstName == null ? '' : doctor.user.firstName} + ' ' + ${doctor.user.middleName == null ? '' : doctor.user.middleName}">Иванов Иван Иванович</td>
+          <td rowspan="2" class="align-middle" th:text="${doctor.user.lastName == null ? '' : doctor.user.lastName} + ' ' + ${doctor.user.firstName == null ? '' : doctor.user.firstName} + ' ' + ${doctor.user.middleName == null ? '' : doctor.user.middleName}"></td>
           <td th:text="'Запись на ' + ${#temporals.format(date, 'dd.MM.yy')}"></td>
         </tr>
         <tr>
