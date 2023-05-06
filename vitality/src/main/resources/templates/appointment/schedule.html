@@ -45,6 +45,9 @@
           </tr>
           </thead>
           <tbody>
+          <tr th:if="${doctors.isEmpty()}">
+            <td colspan="9">Врачей такой специальности нет</td>
+          </tr>
           <tr th:each="doctor : ${doctors}">
             <td class="text-start" th:text="${doctor.user.lastName == null ? '' : doctor.user.lastName} + ' ' + ${doctor.user.firstName == null ? '' : doctor.user.firstName} + ' ' + ${doctor.user.middleName == null ? '' : doctor.user.middleName}"></td>
             <td class="text-start" th:text="#{${doctor.speciality}}"></td>
@@ -60,7 +63,7 @@
           </tbody>
         </table>
       </div>
-      <div class="col-12 text-center">
+      <div class="col-12 text-center mb-4">
         <a th:if="${param.week[0].equals('0')}" class="col-2 btn btn-primary disabled">Предыдущая неделя</a>
         <a th:unless="${param.week[0].equals('0')}" th:href="@{/appointment/schedule(week=${param.week[0]} - 1, speciality=${param.speciality})}" class="col-2 btn btn-primary">Предыдущая неделя</a>
         <a th:href="@{/appointment/schedule(week=${param.week[0]} + 1, speciality=${param.speciality})}" class="col-2 btn btn-primary">Следующая неделя</a>

@@ -9,8 +9,8 @@
 </head>
 <body>
 <div th:replace="'/page elements/header' :: header"></div>
-<main style="display: flex; height: 80vh; align-items: center">
-  <div class="container auth-form col-xl-4 col-lg-6 col-md-8 col-sm-11">
+<main style="display: flex; min-height: 85vh; align-items: center">
+  <div class="container auth-form col-xl-4 col-lg-6 col-md-8 col-sm-11 my-5">
     <form class="m-4" th:method="POST" th:action="@{/patient/edit/{patientId}(patientId = ${user.patient.id})}">
       <h4 class="text-center">Изменить данные пациента</h4>
       <div class="mb-3">

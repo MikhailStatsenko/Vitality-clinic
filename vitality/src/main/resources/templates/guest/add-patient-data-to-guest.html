@@ -9,7 +9,7 @@
 </head>
 <body>
 <div th:replace="'/page elements/header' :: header"></div>
-<main style="display: flex; height: 80vh; align-items: center">
+<main style="display: flex; min-height: 80vh; align-items: center">
   <div class="container auth-form col-xl-4 col-lg-6 col-md-8 col-sm-11">
     <form class="m-4" th:method="POST" th:action="@{/guest/edit/{guestId}(guestId=${#authentication.principal.id})}">
       <h4 class="text-center">Заполните, пожалуйста, следущие поля</h4>

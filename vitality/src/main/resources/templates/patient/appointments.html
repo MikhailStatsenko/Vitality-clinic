@@ -12,6 +12,7 @@
 
   <main class="container my-4" style="min-height: 90vh">
     <h2 class="mb-3">Приемы</h2>
+    <div th:if="${appointments.isEmpty()}">У вас пока нет записей</div>
     <div class="row my-4">
       <div class="col-md-12 col-lg-6" th:each="appointment : ${appointments}" th:if="${appointment.status.name().equals('ACTIVE')}">
         <div class="card mb-3 border-success">
