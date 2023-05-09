@@ -1,6 +1,7 @@
 package com.vitality.clinic.model;
 
 import com.vitality.clinic.utils.enums.UserRole;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

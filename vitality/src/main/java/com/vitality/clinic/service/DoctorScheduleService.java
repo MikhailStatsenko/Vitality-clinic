@@ -45,6 +45,8 @@ public class DoctorScheduleService {
         for (DayOfWeek day : DayOfWeek.values()) {
             String[] workdayStart = params.get(day + "_start");
             String[] workdayEnd = params.get(day + "_end");
+            if (workdayStart == null || workdayEnd == null)
+                continue;
             if (workdayStart[0].length() > 0 && workdayEnd[0].length() > 0) {
                 DoctorSchedule schedule = new DoctorSchedule();
                 schedule.setDayOfWeek(day);
