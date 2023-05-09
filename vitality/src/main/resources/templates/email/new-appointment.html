@@ -8,7 +8,7 @@
   <main>
     <p>
       Уважаем<span th:text="${appointment.patient.gender.name().equals('MALE') ? 'ый' : 'ая'}"></span>
-      <span th:text="${patient_user.firstName == null ? '' : patient_user.firstName} + '' + ${patient_user.middleName == null ? '' : patient_user.middleName}"></span>
+      <span th:text="${patient_user.firstName == null ? '' : patient_user.firstName} + ' ' + ${patient_user.middleName == null ? '' : patient_user.middleName}"></span>
     </p>
     <p>
       Ваша заявка на запись была подтверждена. При посещении нашего медицинского учреждения пациентам и сопровождающим
